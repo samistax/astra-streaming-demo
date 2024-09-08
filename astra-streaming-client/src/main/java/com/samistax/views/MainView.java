@@ -44,7 +44,7 @@ public class MainView extends VerticalLayout {
 
         // Create a grid bound to the list
         Grid<SampleEvent> grid = new Grid<>(SampleEvent.class);
-        grid.setColumns("event_time", "transaction_id", "environment");
+        grid.setColumns("event_time","status_code", "user_name", "transaction_id", "environment");
         grid.setSizeFull();
 
         Flux<SampleEvent> eventStream = service.getSampleEvents();

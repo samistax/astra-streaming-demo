@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.pulsar.annotation.EnablePulsar;
 import org.springframework.pulsar.core.DefaultSchemaResolver;
+import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.pulsar.core.SchemaResolver;
 import java.nio.file.Path;
 
@@ -46,5 +47,6 @@ public class Application implements AppShellConfigurator {
     @Bean
     public SchemaResolver.SchemaResolverCustomizer<DefaultSchemaResolver> schemaResolverCustomizer() {
         return (schemaResolver) -> schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.JSON(SampleEvent.class));
+        //return (schemaResolver) -> schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.STRING);
     }
 }

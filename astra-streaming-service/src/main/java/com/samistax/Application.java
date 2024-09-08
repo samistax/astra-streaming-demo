@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.pulsar.annotation.EnablePulsar;
 import org.springframework.pulsar.core.DefaultSchemaResolver;
+import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.pulsar.core.SchemaResolver;
 
 
@@ -16,10 +17,13 @@ import org.springframework.pulsar.core.SchemaResolver;
 //@EnableConfigurationProperties(DataStaxAstraProperties.class)
 public class Application {
 
-    @Bean
+
+    /*@Bean
     public SchemaResolver.SchemaResolverCustomizer<DefaultSchemaResolver> schemaResolverCustomizer() {
         return (schemaResolver) -> schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.JSON(SampleEvent.class));
     }
+
+     */
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

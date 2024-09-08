@@ -1,16 +1,21 @@
 package com.samistax.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.samistax.dto.SampleEvent;
+import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.pulsar.core.PulsarTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,14 +36,9 @@ public class EventController {
     protected Logger logger = Logger.getLogger(EventController.class.getName());
     private List<SampleEvent> events = new ArrayList<>();
 
-    
-    @Autowired
+
     //private final PulsarTemplate<SampleEvent> pulsarTemplate;
     private final PulsarTemplate<String> pulsarTemplate;
-
-
-    @Value("${app.pulsar_producer_enabled:true}")
-    private boolean PULSAR_PRODUCER_MODE;
 
     public EventController(PulsarTemplate<String> pulsarTemplate) {
         this.pulsarTemplate = pulsarTemplate;
@@ -54,23 +54,40 @@ public class EventController {
         JsonMapper mapper = new JsonMapper();
         // Convert the POJO to a JSON string
         try {
+            /*try {
+
+            } catch (JsonProcessingException jpe) {
+                throw new RuntimeException(jpe);
+            }
+             */
             String jsonPayload = mapper.writeValueAsString(event);
             pulsarTemplate.sendAsync(jsonPayload);
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
+
+            //pulsarTemplate.sendAsync(event);
         } catch (PulsarClientException pce) {
             throw new RuntimeException(pce);
+        } catch (JsonProcessingException jpe) {
+            throw new RuntimeException(jpe);
         }
+
     }
 
     @PostMapping("/trigger")
     public ResponseEntity<String> triggerEvent(@RequestBody String jsonPayload) {
         try {
             pulsarTemplate.sendAsync(jsonPayload);
-            return new ResponseEntity<>("Event triggered successfully.", HttpStatus.OK);
-        } catch (PulsarClientException e) {}
-        return new ResponseEntity<>("Event triggering failed.", HttpStatus.INTERNAL_SERVER_ERROR);
+
+            //JsonMapper mapper = new JsonMapper();
+            //pulsarTemplate.sendAsync(mapper.readValue(jsonPayload, SampleEvent.class));
+
+        } catch (PulsarClientException e) {
+            return new ResponseEntity<>("Event triggering failed (PulsarClientException).", HttpStatus.INTERNAL_SERVER_ERROR);
+        }// catch (JsonProcessingException e) {
+        //   return new ResponseEntity<>("Event triggering failed (JsonProcessingException).", HttpStatus.INTERNAL_SERVER_ERROR);
+        //}
+        return new ResponseEntity<>("Event triggered successfully.", HttpStatus.OK);
     }
+
 
     @RequestMapping("/generateEvents/{eventCount}")
     public List<SampleEvent> generate(@PathVariable("eventCount") String eventCount) {

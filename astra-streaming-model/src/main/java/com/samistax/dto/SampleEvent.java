@@ -35,5 +35,4 @@ public @Data class SampleEvent {
     private String url;
     private String user_company;
     private String user_name;
-
 }

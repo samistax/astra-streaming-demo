@@ -1,10 +1,12 @@
 package com.samistax.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter @Setter
 // Secure Event sample event
-public @Data class SampleEvent {
+public @Data class SampleEvent extends  BaseEvent{
     private String transaction_id;
     private long event_time;
     private long cas_timestamp;
@@ -35,5 +37,4 @@ public @Data class SampleEvent {
     private String url;
     private String user_company;
     private String user_name;
-
 }

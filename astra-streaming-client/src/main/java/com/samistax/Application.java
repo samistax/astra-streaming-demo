@@ -6,7 +6,6 @@ import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import org.apache.pulsar.client.api.Schema;
-import org.springframework.beans.factory.annotation.Value;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 
 import org.springframework.boot.SpringApplication;
@@ -43,6 +42,7 @@ public class Application implements AppShellConfigurator {
         return builder -> builder
                 .withCloudSecureConnectBundle(bundle);
     }
+    // Add Schema Resolver for pulsar schema definition
     @Bean
     public SchemaResolver.SchemaResolverCustomizer<DefaultSchemaResolver> schemaResolverCustomizer() {
         return (schemaResolver) -> schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.JSON(SampleEvent.class));

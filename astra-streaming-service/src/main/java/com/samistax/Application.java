@@ -1,5 +1,6 @@
 package com.samistax;
 
+import com.samistax.dto.PriceUpdateEvent;
 import com.samistax.dto.SampleEvent;
 import org.apache.pulsar.client.api.Schema;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +19,10 @@ public class Application {
 
     @Bean
     public SchemaResolver.SchemaResolverCustomizer<DefaultSchemaResolver> schemaResolverCustomizer() {
-        return (schemaResolver) -> schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.JSON(SampleEvent.class));
+        return (schemaResolver) -> {
+            schemaResolver.addCustomSchemaMapping(SampleEvent.class, Schema.JSON(SampleEvent.class));
+            schemaResolver.addCustomSchemaMapping(PriceUpdateEvent.class, Schema.JSON(PriceUpdateEvent.class));
+        };
     }
 
     public static void main(String[] args) {

@@ -2,17 +2,11 @@ package com.samistax.views;
 
 import com.samistax.astra.PulsarService;
 import com.samistax.dto.SampleEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import reactor.core.publisher.Flux;
 

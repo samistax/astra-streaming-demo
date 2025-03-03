@@ -37,7 +37,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <!-- Setup Spring MVC & REST, use Embedded Tomcat -->
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.version}</version>
@@ -47,6 +51,11 @@
             <artifactId>spring-pulsar-spring-boot-starter</artifactId>
             <version>0.2.0</version>
         </dependency>
+        <!--dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-pulsar</artifactId>
+            <version>3.2.4</version>
+        </dependency-->
     </dependencies>
     <build>
         <plugins>

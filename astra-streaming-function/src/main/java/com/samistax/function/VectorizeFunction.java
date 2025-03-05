@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class VectorizeFunction implements Function<GenericObject, Void> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestFunction.class);
+    private static final Logger logger = LoggerFactory.getLogger(Fi.class);
     private Collection<Document> collection;
     private com.fasterxml.jackson.databind.ObjectMapper pulsarObjectMapper = new com.fasterxml.jackson.databind.ObjectMapper(); // Unshaded Jackson ObjectMapper for Pulsar
     private String astraApiEndpoint;

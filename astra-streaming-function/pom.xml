@@ -11,6 +11,11 @@
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
+            <groupId>com.datastax.astra</groupId>
+            <artifactId>astra-db-java</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        <dependency>
             <groupId>com.samistax</groupId>
             <artifactId>astra-streaming-model</artifactId>
             <version>${revision}</version>

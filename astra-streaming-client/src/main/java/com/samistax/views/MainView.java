@@ -1,7 +1,7 @@
 package com.samistax.views;
 
 import com.samistax.astra.PulsarService;
-import com.samistax.dto.SampleEvent;
+import com.samistax.dto.PriceUpdateEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +37,11 @@ public class MainView extends VerticalLayout {
     public MainView(@Autowired PulsarService service){
 
         // Create a grid bound to the list
-        Grid<SampleEvent> grid = new Grid<>(SampleEvent.class);
-        grid.setColumns("event_time","status_code", "user_name", "transaction_id", "environment");
+        Grid<PriceUpdateEvent> grid = new Grid<>(PriceUpdateEvent.class);
+        //grid.setColumns("event_time","status_code", "user_name", "transaction_id", "environment");
         grid.setSizeFull();
 
-        Flux<SampleEvent> eventStream = service.getSampleEvents();
+        Flux<PriceUpdateEvent> eventStream = service.getSampleEvents();
         eventStream.subscribe(
                 event -> {
                     System.out.println("Received event: " + event);
@@ -54,7 +54,7 @@ public class MainView extends VerticalLayout {
                 () -> System.out.println("Stream completed.")
         );
 
-        add(new Span("Listening to identified anomalies"), grid);
+        add(new Span("Listening to Apache Pulsar messages"), grid);
         setSizeFull();
     }
 

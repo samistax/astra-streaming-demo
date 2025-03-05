@@ -1,22 +1,22 @@
 package com.samistax.astra;
 
+import com.samistax.dto.PriceUpdateEvent;
 import org.springframework.pulsar.annotation.PulsarListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
-import com.samistax.dto.SampleEvent;
 
 @Service
 public class PulsarService {
 
-    private final Sinks.Many<SampleEvent> sampleEventSink = Sinks.many().multicast().directBestEffort();
-    private final Flux<SampleEvent> sampleEvents = sampleEventSink.asFlux();
+    private final Sinks.Many<PriceUpdateEvent> sampleEventSink = Sinks.many().multicast().directBestEffort();
+    private final Flux<PriceUpdateEvent> sampleEvents = sampleEventSink.asFlux();
 
     @PulsarListener
-    private void sampleEventReceived(SampleEvent sampleEvent) {
+    private void sampleEventReceived(PriceUpdateEvent sampleEvent) {
         sampleEventSink.tryEmitNext(sampleEvent);
     }
-    public Flux<SampleEvent> getSampleEvents() {
+    public Flux<PriceUpdateEvent> getSampleEvents() {
         return sampleEvents;
     }
 }

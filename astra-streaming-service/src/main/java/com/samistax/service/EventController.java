@@ -3,11 +3,14 @@ package com.samistax.service;
 
 import com.datastax.astra.client.model.InsertOneResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.samistax.dto.BaseEvent;
 import com.samistax.dto.PriceUpdateEvent;
 import com.samistax.generator.PricingDataGenerator;
 import com.samistax.generator.SampleEventGenerator;
+import org.apache.pulsar.client.api.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -49,11 +52,11 @@ public class EventController {
     private Collection<Document> collection;
 
     private final boolean PUBLISH_MODE_PULSAR = true;
-    private final boolean PUBLISH_MODE_DATA_API = true;
+    private final boolean PUBLISH_MODE_DATA_API = false;
 
     @Autowired
-    private final PulsarTemplate<String> pulsarTemplate;
-    public EventController(PulsarTemplate<String> pulsarTemplate) {
+    private final PulsarTemplate<PriceUpdateEvent> pulsarTemplate;
+    public EventController(PulsarTemplate<PriceUpdateEvent> pulsarTemplate) {
         this.pulsarTemplate = pulsarTemplate;
     }
 
@@ -69,7 +72,7 @@ public class EventController {
         return db;
     }
     // STEP 2: Generate sample data and write to Astra DB
-    @Scheduled(fixedRateString = "${scheduler.pollingInterval:50}") // delay in millisecond for generating new event
+    @Scheduled(fixedRateString = "${scheduler.pollingInterval:1000}") // delay in millisecond for generating new event
     public void simulateEventStream() {
         // Simulate event generation background task
         //SampleEvent event = generateEvents(1).get(0);
@@ -97,7 +100,9 @@ public class EventController {
         if ( PUBLISH_MODE_PULSAR ) {
             // Push event to Astra Streaming for payload transformation and persisting msg to Astra DB using sink)
             try {
-                pulsarTemplate.sendAsync(jsonPayload);
+                //pulsarTemplate.sendAsync(jsonPayload);
+                pulsarTemplate.sendAsync(event);
+
             } catch (PulsarClientException pce) {
                 throw new RuntimeException(pce);
             }
@@ -107,9 +112,15 @@ public class EventController {
     @PostMapping("/trigger")
     public ResponseEntity<String> triggerEvent(@RequestBody String jsonPayload) {
         try {
-            pulsarTemplate.sendAsync(jsonPayload);
+            // Create an ObjectMapper instance for parsing JSON
+            ObjectMapper mapper = new ObjectMapper();
+            // Parse the input JSON string to JsonNode
+            JsonNode jsonNode = mapper.readTree(jsonPayload);
+            // Example how to map JSON to a POJO
+            PriceUpdateEvent pe = mapper.readValue(jsonPayload, PriceUpdateEvent.class);
+            pulsarTemplate.sendAsync(pe);
             return new ResponseEntity<>("Event triggered successfully.", HttpStatus.OK);
-        } catch (PulsarClientException e) {}
+        } catch (PulsarClientException | JsonProcessingException e) {}
         return new ResponseEntity<>("Event triggering failed.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

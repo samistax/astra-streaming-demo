@@ -1,0 +1,22 @@
+jar: <path to your demo root folder>/astra-streaming-function/target/astra-streaming-function-1.0-SNAPSHOT-jar-with-dependencies.jar  # Path to your function JAR
+className: com.samistax.function.VectorizeFunction             # Fully qualified class name of the function
+parallelism: 1                                                 # Number of instances
+inputs:
+  - persistent://<replace_with_your_tenant>/default/prices     # Input topic
+output: ""                                                     # Output topic (optional)
+autoAck: true                                                  # Automatic acknowledgment
+tenant: <replace_with_your_tenant>                                          # Pulsar tenant name
+namespace: default                                             # Namespace
+name: vectorize-function                                       # Function name
+logTopic: ""                                                   # Log topic (optional)
+userConfig:
+  ASTRA_DB_API_ENDPOINT: "<your endpoint>"
+  ASTRA_DB_APPLICATION_TOKEN: "<your token>"
+  ASTRA_DB_COLLECTION: "prices_vectorized"
+  ASTRA_DB_KEYSPACE: "default_keyspace"
+  ASTRA_DB_VECTORIZE_SERVICE: "openai"
+  ASTRA_DB_VECTORIZE_MODEL: "text-embedding-3-small"
+  ASTRA_DB_VECTOR_DIMENSION: "1536"
+  ASTRA_DB_VECTORIZE_FIELD: "itemName"
+  ASTRA_DB_VECTORIZE_SECRET_KEY: "<your open ai secret key from Astra portal>"
+  logging_level: DEBUG

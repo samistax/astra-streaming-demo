@@ -12,6 +12,10 @@
     <pulsar.version>2.10.4</pulsar.version>
     <revision>1.0-SNAPSHOT</revision>
     <spring.version>3.0.2</spring.version>
+
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+
   </properties>
   <modules>
     <module>astra-streaming-model</module>

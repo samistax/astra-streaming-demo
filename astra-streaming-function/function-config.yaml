@@ -18,5 +18,7 @@ userConfig:
   ASTRA_DB_VECTORIZE_MODEL: "text-embedding-3-small"
   ASTRA_DB_VECTOR_DIMENSION: "1536"
   ASTRA_DB_VECTORIZE_FIELD: "itemName"
-  ASTRA_DB_VECTORIZE_SECRET_KEY: "<your open ai secret key from Astra portal>"
+  ASTRA_DB_VECTORIZE_SECRET_KEY: "<the name of the open ai integration api key from Astra portal (settings) >"
   logging_level: DEBUG
+
+#NOTE:   for ASTRA_DB_VECTORIZE_SECRET_KEY you should NOT use the Open AI API KEY.
